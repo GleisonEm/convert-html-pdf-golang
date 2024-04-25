@@ -1,8 +1,6 @@
 package services
 
 import (
-	"bytes"
-	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
@@ -22,22 +20,6 @@ func NewRequestPdf(body string) *RequestPdf {
 	return &RequestPdf{
 		body: body,
 	}
-}
-
-// parsing template function
-func (r *RequestPdf) ParseTemplate(templateFileName string, data interface{}) error {
-
-	t, err := template.ParseFiles(templateFileName)
-	if err != nil {
-		return err
-	}
-	buf := new(bytes.Buffer)
-	if err = t.Execute(buf, data); err != nil {
-		return err
-	}
-	r.body = buf.String()
-
-	return nil
 }
 
 func (r *RequestPdf) ParseToString(templateString string) error {

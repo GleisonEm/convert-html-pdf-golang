@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"runtime"
 
 	"github.com/gleisonem/convert-html-pdf-golang/controllers"
 	"github.com/gorilla/mux"
@@ -11,6 +12,13 @@ import (
 )
 
 func main() {
+	var mem runtime.MemStats
+	runtime.ReadMemStats(&mem)
+	fmt.Printf("Memory usage before: %v MB\n", mem.Alloc/1024/1024)
+
+	cpu := runtime.NumCPU()
+	fmt.Printf("CPU Load before: %v%%\n", cpu)
+
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("Erro ao carregar o arquivo .env")
@@ -18,13 +26,11 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8087"
+		port = "8089"
 	}
 
 	r := mux.NewRouter()
-	r.HandleFunc("/test", controllers.HtmlConverterHandler).Methods("GET")
 	r.HandleFunc("/generate", controllers.GenerateHtmlConverterHandler).Methods("POST")
-	r.HandleFunc("/generate/stream", controllers.GenerateBufferHtmlConverterHandler).Methods("POST")
 	http.Handle("/", r)
 
 	fs := http.FileServer(http.Dir("./storage/"))

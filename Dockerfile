@@ -1,5 +1,5 @@
 # Use a imagem oficial do Golang como base
-FROM golang:latest
+FROM golang:1.18
 
 # Defina a variável de ambiente PORT com um valor padrão
 RUN apt-get update && apt-get install -y wkhtmltopdf
