@@ -5,10 +5,12 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"time"
 
 	"github.com/gleisonem/convert-html-pdf-golang/controllers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	cpu "github.com/shirou/gopsutil/cpu"
 )
 
 func main() {
@@ -16,8 +18,8 @@ func main() {
 	runtime.ReadMemStats(&mem)
 	fmt.Printf("Memory usage before: %v MB\n", mem.Alloc/1024/1024)
 
-	cpu := runtime.NumCPU()
-	fmt.Printf("CPU Load before: %v%%\n", cpu)
+	percent, _ := cpu.Percent(time.Second, false)
+	fmt.Printf("CPU Load before: %v%%\n", percent[0])
 
 	err := godotenv.Load()
 	if err != nil {

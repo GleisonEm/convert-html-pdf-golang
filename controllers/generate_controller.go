@@ -8,6 +8,8 @@ import (
 
 	"time"
 
+	cpu "github.com/shirou/gopsutil/cpu"
+
 	"github.com/gleisonem/convert-html-pdf-golang/services"
 	"github.com/google/uuid"
 )
@@ -18,8 +20,8 @@ func GenerateHtmlConverterHandler(w http.ResponseWriter, r *http.Request) {
 	runtime.ReadMemStats(&mem)
 	fmt.Printf("Memory usage before route: %v MB\n", mem.Alloc/1024/1024)
 
-	cpu := runtime.NumCPU()
-	fmt.Printf("CPU Load before route: %v%%\n", cpu)
+	percent, _ := cpu.Percent(time.Second, false)
+	fmt.Printf("CPU Load before route: %v%%\n", percent[0])
 
 	pdfService := services.NewRequestPdf("")
 
@@ -62,8 +64,8 @@ func GenerateHtmlConverterHandler(w http.ResponseWriter, r *http.Request) {
 		runtime.ReadMemStats(&mem)
 		fmt.Printf("Memory usage after: %v MB\n", mem.Alloc/1024/1024)
 
-		cpu := runtime.NumCPU()
-		fmt.Printf("CPU Load after: %v%%\n", cpu)
+		percent, _ := cpu.Percent(time.Second, false)
+		fmt.Printf("CPU Load after: %v%%\n", percent[0])
 
 		elapsed := time.Since(start)
 		fmt.Printf("Route executed in %s\n", elapsed)

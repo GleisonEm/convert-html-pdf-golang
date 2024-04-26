@@ -8,5 +8,12 @@ services:
     restart: always
     ports:
       - "${PORT}:${PORT}"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5' # 1 vCPU equivale a 1 CPU no Docker
+          memory: 512M
+        reservations:
+          memory: 256M
     env_file:
       - .env
