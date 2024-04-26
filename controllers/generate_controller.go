@@ -4,22 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"runtime"
-
-	"time"
 
 	"github.com/gleisonem/convert-html-pdf-golang/services"
 	"github.com/google/uuid"
 )
 
 func GenerateHtmlConverterHandler(w http.ResponseWriter, r *http.Request) {
-	start := time.Now()
-	var mem runtime.MemStats
-	runtime.ReadMemStats(&mem)
-	fmt.Printf("Memory usage before route: %v MB\n", mem.Alloc/1024/1024)
-
-	cpu := runtime.NumCPU()
-	fmt.Printf("CPU Load before route: %v%%\n", cpu)
 
 	pdfService := services.NewRequestPdf("")
 
@@ -57,16 +47,6 @@ func GenerateHtmlConverterHandler(w http.ResponseWriter, r *http.Request) {
 			"filename": outputPathFileName,
 			"message":  "pdf generated successfully",
 		}
-
-		var mem runtime.MemStats
-		runtime.ReadMemStats(&mem)
-		fmt.Printf("Memory usage after: %v MB\n", mem.Alloc/1024/1024)
-
-		cpu := runtime.NumCPU()
-		fmt.Printf("CPU Load after: %v%%\n", cpu)
-
-		elapsed := time.Since(start)
-		fmt.Printf("Route executed in %s\n", elapsed)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)

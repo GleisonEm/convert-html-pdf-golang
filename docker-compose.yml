@@ -1,4 +1,4 @@
-version: '3'
+version: "3.8"
 services:
   api:
     container_name: go-pdf-test
@@ -8,5 +8,10 @@ services:
     restart: always
     ports:
       - "${PORT}:${PORT}"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
     env_file:
       - .env
